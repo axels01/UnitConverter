@@ -42,28 +42,53 @@ e = {"J": 1, "kJ": 1000,
         "GWh": 3600000000000, "cal": 4.184,
         "kcal": 4184, "BTU": 1055.05585}
 
-quantites = {"l": l, "t": t, "m": m, 
-            "te": te, "a": a, "v": v, 
-            "p": p, "s": s, "e": e}
-
-names = {"l": "Length     ", "t": "Time       ",
-        "m": "Mass       ", "te": "Temperature",
-        "a": "Area       ", "v": "Volume     ",
-        "p": "Pressure   ", "s": "Speed      ",
-        "e": "Energy     "}
+quantities = {"l" : ["Length", l], "t" : ["Time", t],
+        "m" : ["Mass", m], "te" : ["Temperature", te],
+        "a" : ["Area", a], "v" : ["Volume", v],
+        "p" : ["Pressure", p], "s" : ["Speed", s],
+         "e" : ["Energy", e]}
 
 def main():
-    print("Welcome to the unit converter!", "\n")
-    for name in names:
-        print(names[name], ":", name)
-        originQuanitity = input("Please enter quantity to convert from: ")
-    
+        print("Welcome to the unit converter!", "\n")
+        #Prints all the quantities
+        for quantity in quantities:
+                print(quantities[quantity][0], ":", quantity)
 
+        #Enter quantity
+        quantity = input("Enter quantity: ")
+        
+        #If quantity is valid prints units and requires origin unit
+        if quantity in quantities:
+                print("\n", "Units for", quantities[quantity][0], ":" "\n")
+                #Temporary string for untits in quantity
+                unitlist = ""
+                for unit in quantities[quantity][1]:
+                        unitlist += unit + ", "
+                print(unitlist)
+                #Enter origin unit
+                originUnit = input("Enter origin unit: ")
 
-    destinationUnit = input("Please enter unit to convert to: ")
-    value = float(input("Please enter value to convert: "))
+                if originUnit in quantities[quantity][1]:
+                        destinationUnit = input("Enter destination unit: ")
+                        if destinationUnit in quantities[quantity][1]:
+                                #Temporary string for input message
+                                printString = "Please enter valuein" + originUnit + ": "
+                                value = float(input(printString))
+                                #Passes parameters to convert function and prints result
+                                print(convert(quantity, originUnit, destinationUnit, value))
+                        else:
+                                print("Invalid destination unit")
+                else:
+                        print("Invalid origin unit")
+        else:
+                print("Invalid quantity")
+        
 
-
+#Convert function, takes quantity (ex. time), origin unit (ex. s), destination unit (ex. min) and value (ex. 30)
+def convert(quantity, originUnit, destinationUnit, value):
+        #Multiplies input value with the indexed relative value of the origin unit devided by the indexed relative value of the destination unit
+        result = value * quantities[quantity][1][originUnit] / quantities[quantity][1][destinationUnit]
+        return result
 
 if __name__ == "__main__":
     main()
